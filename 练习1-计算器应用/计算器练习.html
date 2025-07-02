@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>练习1 - 简易计算器</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        
+        .calculator {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .input-group {
+            margin: 15px 0;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .operation-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        button {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background: linear-gradient(45deg, #2980b9, #3498db);
+            transform: translateY(-2px);
+        }
+        
+        .result-area {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .result {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .history {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .history-item {
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+            font-family: monospace;
+        }
+        
+        .requirements {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .requirements h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .requirements ul {
+            color: #856404;
+        }
+        
+        .clear-btn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+        }
+        
+        .clear-btn:hover {
+            background: linear-gradient(45deg, #c0392b, #e74c3c);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧮 练习1 - 简易计算器</h1>
+        
+        <!-- 功能要求说明 -->
+        <div class="requirements">
+            <h3>📋 您需要实现的功能：</h3>
+            <ul>
+                <li><strong>基础计算</strong>：加法、减法、乘法、除法</li>
+                <li><strong>输入验证</strong>：检查是否输入了有效数字</li>
+                <li><strong>错误处理</strong>：除零错误、无效输入提示</li>
+                <li><strong>计算历史</strong>：记录每次计算结果</li>
+                <li><strong>清空功能</strong>：清空输入框和历史记录</li>
+                <li><strong>数字格式化</strong>：保留小数位数处理</li>
+            </ul>
+        </div>
+        
+        <!-- 计算器界面 -->
+        <div class="calculator">
+            <div class="input-group">
+                <label for="num1">第一个数字：</label>
+                <input type="number" id="num1" placeholder="请输入第一个数字" step="any">
+            </div>
+            
+            <div class="input-group">
+                <label for="operation">运算符：</label>
+                <select id="operation">
+                    <option value="add">➕ 加法</option>
+                    <option value="subtract">➖ 减法</option>
+                    <option value="multiply">✖️ 乘法</option>
+                    <option value="divide">➗ 除法</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label for="num2">第二个数字：</label>
+                <input type="number" id="num2" placeholder="请输入第二个数字" step="any">
+            </div>
+            
+            <!-- 操作按钮 -->
+            <div class="operation-buttons">
+                <button onclick="calculate()">🟰 计算</button>
+                <button onclick="clearInputs()">🗑️ 清空输入</button>
+                <button onclick="clearHistory()" class="clear-btn">📜 清空历史</button>
+                <button onclick="getRandomNumbers()">🎲 随机数字</button>
+            </div>
+        </div>
+        
+        <!-- 结果显示区域 -->
+        <div class="result-area">
+            <h3>计算结果：</h3>
+            <div class="result" id="result">等待计算...</div>
+            <div id="error-message" style="color: red; text-align: center; margin-top: 10px;"></div>
+        </div>
+        
+        <!-- 计算历史 -->
+        <div class="history">
+            <h3>📜 计算历史：</h3>
+            <div id="history-list">暂无计算历史</div>
+        </div>
+    </div>
+    
+    <script>
+        // ===== 您需要实现以下函数 =====
+        
+        // 全局变量：存储计算历史
+        let calculationHistory = [];
+        
+        // 🎯 主要功能函数 - 请您实现
+        
+        /**
+         * 主计算函数
+         * 要求：
+         * 1. 获取两个输入数字和运算符
+         * 2. 验证输入是否有效
+         * 3. 根据运算符执行对应计算
+         * 4. 显示结果并添加到历史记录
+         * 5. 处理各种错误情况
+         */
+        function calculate() {
+            // TODO: 请在这里实现计算功能
+            const num1=parseFloat(document.getElementById('num1').value);
+            const num2=parseFloat(document.getElementById('num2').value);
+
+            if ( !isValidNumber(num1) || !isValidNumber(num2)){
+                showError("Input a valid number!");
+                return;
+            }
+
+
+            const operation=document.getElementById('operation').value;
+
+
+            let result;
+
+
+            switch(operation){
+                case 'add':result=add(num1,num2);
+                break;
+                case 'subtract':result=subtract(num1,num2);
+                break;
+                case 'multiply':result=multiply(num1,num2);
+                break;
+                case 'divide':result=divide(num1,num2);
+
+            }
+
+            if ( typeof result === 'number'){
+                displayResult(result);
+                addToHistory(num1,operation,num2,result)
+            }
+
+            
+            
+        }
+        
+        /**
+         * 加法函数
+         * 参数：a, b - 两个数字
+         * 返回：计算结果
+         */
+        function add(a, b) {
+            return a+b;
+            // TODO: 请实现加法
+            
+        }
+        
+        /**
+         * 减法函数
+         * 参数：a, b - 两个数字
+         * 返回：计算结果
+         */
+        function subtract(a, b) {
+            return a-b;
+            // TODO: 请实现减法
+            
+        }
+        
+        /**
+         * 乘法函数
+         * 参数：a, b - 两个数字
+         * 返回：计算结果
+         */
+        function multiply(a, b) {
+            return a*b;
+            // TODO: 请实现乘法
+            
+        }
+        
+        /**
+         * 除法函数
+         * 参数：a, b - 两个数字
+         * 返回：计算结果
+         * 要求：处理除零错误
+         */
+        function divide(a, b) {
+            if(b===0){
+                showError("The second number can't be 0 in divide!")
+                return;
+            }
+            return a/b;
+            // TODO: 请实现除法，注意除零检查
+            
+        }
+        
+        /**
+         * 验证输入函数
+         * 参数：value - 输入值
+         * 返回：true/false
+         * 要求：检查是否为有效数字
+         */
+        function isValidNumber(value) {
+
+            if( value==="" || value === null){
+                return false;
+            }
+            if (isNaN(value)){
+                return false;
+            }
+            return true;
+            // TODO: 请实现数字验证
+            
+        }
+        
+        /**
+         * 显示结果函数
+         * 参数：result - 计算结果
+         * 要求：格式化显示结果
+         */
+        function displayResult(result) {
+            const resultBox  = document.getElementById('result');
+
+            resultBox.textContent = result;
+            // TODO: 请实现结果显示
+            
+        }
+        
+        /**
+         * 显示错误信息函数
+         * 参数：message - 错误信息
+         */
+        function showError(message) {
+
+            const errorMessageBox = document.getElementById('result');
+            errorMessageBox.textContent = message;
+            // TODO: 请实现错误信息显示
+            
+        }
+        
+        /**
+         * 添加到历史记录函数
+         * 参数：num1, operator, num2, result - 计算信息
+         */
+        function addToHistory(num1, operator, num2, result) {
+           const historyItem={
+                num1: num1,
+                operator: operator, 
+                num2: num2,
+                result: result,
+                time: new Date().toLocaleString('zh-CN')
+            }
+            calculationHistory.push(historyItem);
+            updateHistoryDisplay();
+            // TODO: 请实现历史记录功能
+            
+        }
+        
+        /**
+         * 更新历史显示函数
+         * 要求：更新页面上的历史记录显示
+         */
+        function updateHistoryDisplay() {
+            const historyDisplay=document.getElementById('history-list')
+            if ( calculationHistory.length===0){
+                historyDisplay.textContent='No calculation record.'
+                return;
+            }
+            const lasthistory=calculationHistory[calculationHistory.length-1]
+            let symbol = '+';
+            if ( lasthistory.operator==='subtract')symbol = '-';
+            if ( lasthistory.operator==='multiply')symbol = '*';
+            if ( lasthistory.operator==='divide')symbol = '/';
+
+            historyDisplay.textContent=`${lasthistory.num1} ${symbol} ${lasthistory.num2} = ${lasthistory.result}`;
+            // TODO: 请实现历史记录显示更新
+            
+        }
+        
+        /**
+         * 清空输入框函数
+         */
+        function clearInputs() {
+
+            num1clear = document.getElementById('num1');
+            num2clear = document.getElementById('num2');
+
+            operatorclear = document.getElementById('operation')
+
+            num1clear.value="";
+            num2clear.value="";
+            operatorclear.selectedIndex=0;
+            displayResult("");
+            return;
+            // TODO: 请实现清空输入功能
+            
+        }
+        
+        /**
+         * 清空历史记录函数
+         */
+        function clearHistory() {
+            calculationHistory = [];
+            updateHistoryDisplay();
+            displayResult("");
+            return;
+            // TODO: 请实现清空历史功能
+            
+        }
+        
+        /**
+         * 生成随机数字函数（额外功能）
+         * 要求：为两个输入框填入随机数字
+         */
+        function getRandomNumbers() {
+            // TODO: 请实现随机数字生成
+            
+        }
+        
+        /**
+         * 格式化数字函数（辅助功能）
+         * 参数：number - 需要格式化的数字
+         * 返回：格式化后的数字字符串
+         * 要求：处理小数位数，避免过长的小数
+         */
+        function formatNumber(number) {
+            // TODO: 请实现数字格式化
+            
+        }
+        
+        // ===== 页面加载完成后的初始化代码 =====
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('计算器页面已加载，请开始实现功能！');
+            
+            // 为输入框添加回车键支持（可选实现）
+            document.getElementById('num1').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('num2').focus();
+                }
+            });
+            
+            document.getElementById('num2').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    calculate();
+                }
+            });
+        });
+        
+        // ===== 提示和说明 =====
+        
+        /*
+        💡 实现提示：
+        
+        1. 使用 document.getElementById() 获取输入值
+        2. 使用 parseFloat() 将字符串转换为数字
+        3. 使用 isNaN() 检查是否为有效数字
+        4. 使用 toFixed() 格式化小数位数
+        5. 使用 innerHTML 或 textContent 更新页面内容
+        
+        🎯 测试建议：
+        
+        1. 正常计算：3 + 5 = 8
+        2. 小数计算：3.14 * 2 = 6.28
+        3. 除零测试：5 ÷ 0 = 错误
+        4. 无效输入：abc + 123 = 错误
+        5. 历史记录：多次计算后查看历史
+        
+        🚀 额外挑战：
+        
+        1. 添加更多运算（平方根、幂运算）
+        2. 添加键盘快捷键支持
+        3. 添加计算结果复制功能
+        4. 添加主题切换功能
+        */
+        
+    </script>
+</body>
+</html>

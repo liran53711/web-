@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript 放置位置演示</title>
+    
+    <!-- 方式1: 在 head 中的内联 JavaScript -->
+    <script>
+        console.log("1. Head中的JavaScript执行了");
+    </script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .demo-section {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .code-example {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript 在HTML中的不同放置位置</h1>
+    
+    <div class="demo-section">
+        <h2>方式1: 内联事件处理</h2>
+        <p>JavaScript代码直接写在HTML标签中：</p>
+        <div class="code-example">
+            &lt;button onclick="alert('内联JavaScript!')"&gt;
+        </div>
+        <button onclick="alert('这是内联JavaScript!')">点击我 - 内联方式</button>
+    </div>
+
+    <div class="demo-section">
+        <h2>方式2: &lt;head&gt; 中的脚本</h2>
+        <p>JavaScript代码放在HTML的 &lt;head&gt; 部分</p>
+        <p>优点：代码组织清晰<br>缺点：无法直接操作DOM元素</p>
+    </div>
+
+    <div class="demo-section">
+        <h2>方式3: &lt;body&gt; 底部的脚本 ⭐（推荐）</h2>
+        <p>JavaScript代码放在 &lt;/body&gt; 标签前：</p>
+        <button id="body-script-btn">点击我 - Body底部方式</button>
+        <p id="demo-output">等待点击...</p>
+        <p>优点：DOM已加载，可直接操作元素</p>
+    </div>
+
+    <script>
+        console.log("2. Body底部的JavaScript执行了");
+        
+        // 现在可以安全地操作DOM元素
+        document.getElementById('body-script-btn').onclick = function() {
+            document.getElementById('demo-output').textContent = "成功！这就是body底部脚本的效果";
+            document.getElementById('demo-output').style.color = "green";
+        };
+    </script>
+</body>
+</html>

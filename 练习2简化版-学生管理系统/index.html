@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生信息管理系统</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .add-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        
+        input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #74b9ff;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .delete-btn {
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #74b9ff;
+        }
+        
+        .stat-label {
+            color: #636e72;
+            margin-top: 5px;
+        }
+        
+        .student-list {
+            background: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .student-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+            background: white;
+            margin-bottom: 1px;
+        }
+        
+        .student-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .student-info {
+            flex: 1;
+        }
+        
+        .student-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .student-details {
+            color: #636e72;
+            font-size: 0.9em;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            color: #95a5a6;
+        }
+        
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .features {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #74b9ff;
+        }
+        
+        .features h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        .feature-item {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 学生管理系统</h1>
+        
+        <!-- 功能说明 -->
+        <div class="features">
+            <h3>📚 本练习学习内容：</h3>
+            <div class="feature-list">
+                <div class="feature-item">📄 HTML/JS文件分离</div>
+                <div class="feature-item">📊 JSON数据处理</div>
+                <div class="feature-item">➡️ ES6箭头函数</div>
+                <div class="feature-item">📝 模板字符串</div>
+                <div class="feature-item">📦 解构赋值</div>
+                <div class="feature-item">🔄 数组方法map/filter</div>
+            </div>
+        </div>
+        
+        <!-- 统计信息 -->
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="total-students">0</div>
+                <div class="stat-label">总学生数</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="avg-age">0</div>
+                <div class="stat-label">平均年龄</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="total-subjects">0</div>
+                <div class="stat-label">专业数量</div>
+            </div>
+        </div>
+        
+        <!-- 添加学生表单 -->
+        <div class="add-section">
+            <h3>➕ 添加新学生</h3>
+            <div class="form-group">
+                <input type="text" id="student-name" placeholder="学生姓名" maxlength="20">
+                <input type="number" id="student-age" placeholder="年龄" min="16" max="30">
+                <input type="text" id="student-major" placeholder="专业" maxlength="30">
+                <button onclick="addStudent()">添加学生</button>
+                <button onclick="clearAllData()" style="background: linear-gradient(135deg, #fd79a8, #e84393);">清空所有</button>
+            </div>
+        </div>
+        
+        <!-- 学生列表 -->
+        <div class="student-list">
+            <div id="student-container">
+                <div class="empty-state">
+                    <div class="empty-state-icon">👨‍🎓</div>
+                    <h3>暂无学生信息</h3>
+                    <p>点击上方添加按钮开始添加学生</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 引用外部JavaScript文件 -->
+    <script src="script.js"></script>
+</body>
+</html>

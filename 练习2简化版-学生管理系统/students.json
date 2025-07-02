@@ -1,0 +1,26 @@
+{
+  "students": [
+    {
+      "id": 1,
+      "name": "张三",
+      "age": 20,
+      "major": "计算机科学",
+      "createTime": "2024-01-15"
+    },
+    {
+      "id": 2,
+      "name": "李四", 
+      "age": 19,
+      "major": "软件工程",
+      "createTime": "2024-01-16"
+    },
+    {
+      "id": 3,
+      "name": "王五",
+      "age": 21,
+      "major": "计算机科学", 
+      "createTime": "2024-01-17"
+    }
+  ],
+  "lastId": 3
+}

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多个外部JavaScript文件演示</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .header {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .tool-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .tool-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background: linear-gradient(45deg, #2980b9, #3498db);
+            transform: translateY(-2px);
+        }
+        
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+            min-height: 20px;
+        }
+        
+        .file-info {
+            background: #e8f4f8;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #bee5eb;
+        }
+        
+        .file-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .file-tag {
+            background: #007bff;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 多个外部JavaScript文件演示</h1>
+        <p>这个页面使用了两个外部JavaScript文件：<code>script.js</code> 和 <code>utils.js</code></p>
+        
+        <div class="file-info">
+            <h3>📁 当前加载的外部文件：</h3>
+            <div class="file-list">
+                <span class="file-tag">script.js - 主要功能</span>
+                <span class="file-tag">utils.js - 工具函数</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="tools-grid">
+        <!-- 数学工具 -->
+        <div class="tool-card">
+            <h3>🧮 数学工具 (utils.js)</h3>
+            <input type="number" id="min-num" placeholder="最小值" value="1">
+            <input type="number" id="max-num" placeholder="最大值" value="100">
+            <button onclick="generateRandomNumber()">生成随机数</button>
+            
+            <input type="number" id="round-num" placeholder="要四舍五入的数字" value="3.14159">
+            <input type="number" id="decimals" placeholder="小数位数" value="2">
+            <button onclick="roundNumber()">四舍五入</button>
+            
+            <div class="result" id="math-result">数学计算结果...</div>
+        </div>
+        
+        <!-- 字符串工具 -->
+        <div class="tool-card">
+            <h3>📝 字符串工具 (utils.js)</h3>
+            <input type="text" id="string-input" placeholder="输入一些文字..." value="hello world">
+            <button onclick="processString()">处理字符串</button>
+            <button onclick="analyzeString()">分析字符串</button>
+            <div class="result" id="string-result">字符串处理结果...</div>
+        </div>
+        
+        <!-- 日期工具 -->
+        <div class="tool-card">
+            <h3>📅 日期工具 (utils.js)</h3>
+            <input type="date" id="birth-date" value="1990-01-01">
+            <button onclick="calculateUserAge()">计算年龄</button>
+            <button onclick="showDateInfo()">显示日期信息</button>
+            <div class="result" id="date-result">日期计算结果...</div>
+        </div>
+        
+        <!-- 数组工具 -->
+        <div class="tool-card">
+            <h3>📊 数组工具 (utils.js)</h3>
+            <textarea id="array-input" placeholder="输入数字，用逗号分隔..." rows="3">1,2,3,2,4,5,3,6,7,8</textarea>
+            <button onclick="processArray()">处理数组</button>
+            <div class="result" id="array-result">数组处理结果...</div>
+        </div>
+        
+        <!-- 表单验证 -->
+        <div class="tool-card">
+            <h3>✅ 表单验证 (utils.js)</h3>
+            <input type="email" id="email-input" placeholder="输入邮箱地址...">
+            <input type="tel" id="phone-input" placeholder="输入手机号码...">
+            <button onclick="validateForm()">验证表单</button>
+            <div class="result" id="validation-result">验证结果...</div>
+        </div>
+        
+        <!-- 主应用功能 -->
+        <div class="tool-card">
+            <h3>🎯 主应用功能 (script.js)</h3>
+            <input type="text" id="main-user-name" placeholder="输入您的姓名...">
+            <button onclick="handleUserLogin()">用户登录</button>
+            <button onclick="showRandomQuote()">获取名言</button>
+            <div class="result" id="main-result">主应用结果...</div>
+        </div>
+    </div>
+    
+    <!-- 展示外部文件的加载顺序 -->
+    <div class="file-info">
+        <h3>📋 外部文件加载说明：</h3>
+        <ol>
+            <li><strong>utils.js</strong> - 先加载工具函数库</li>
+            <li><strong>script.js</strong> - 后加载主要功能（可能会使用工具函数）</li>
+            <li>加载顺序很重要：被依赖的文件要先加载</li>
+        </ol>
+        
+        <h4>💡 最佳实践：</h4>
+        <ul>
+            <li>工具类和库文件放在前面</li>
+            <li>主要功能文件放在后面</li>
+            <li>所有外部文件放在 &lt;/body&gt; 标签前</li>
+        </ul>
+    </div>
+    
+    <!-- 引用外部JavaScript文件 - 注意顺序！ -->
+    <!-- 1. 先加载工具类 -->
+    <script src="utils.js"></script>
+    <!-- 2. 再加载主功能 -->
+    <script src="script.js"></script>
+    <!-- 3. 最后是页面特定的脚本 -->
+    <script>
+        // 这里可以使用前面两个文件中的函数
+        
+        function generateRandomNumber() {
+            const min = parseInt(document.getElementById('min-num').value);
+            const max = parseInt(document.getElementById('max-num').value);
+            const random = MathUtils.randomBetween(min, max);
+            document.getElementById('math-result').textContent = `随机数: ${random} (范围: ${min}-${max})`;
+        }
+        
+        function roundNumber() {
+            const num = parseFloat(document.getElementById('round-num').value);
+            const decimals = parseInt(document.getElementById('decimals').value);
+            const rounded = MathUtils.roundTo(num, decimals);
+            document.getElementById('math-result').textContent = `${num} 四舍五入到 ${decimals} 位小数: ${rounded}`;
+        }
+        
+        function processString() {
+            const str = document.getElementById('string-input').value;
+            const capitalized = StringUtils.capitalize(str);
+            const reversed = StringUtils.reverse(str);
+            document.getElementById('string-result').innerHTML = 
+                `首字母大写: ${capitalized}<br>反转字符串: ${reversed}`;
+        }
+        
+        function analyzeString() {
+            const str = document.getElementById('string-input').value;
+            const stats = StringUtils.countCharacters(str);
+            document.getElementById('string-result').innerHTML = 
+                `字符分析:<br>总字符: ${stats.total}<br>字母: ${stats.letters}<br>数字: ${stats.numbers}<br>空格: ${stats.spaces}`;
+        }
+        
+        function calculateUserAge() {
+            const birthDate = document.getElementById('birth-date').value;
+            if (!birthDate) {
+                document.getElementById('date-result').textContent = '请选择出生日期';
+                return;
+            }
+            const age = DateUtils.calculateAge(birthDate);
+            document.getElementById('date-result').textContent = `您的年龄: ${age} 岁`;
+        }
+        
+        function showDateInfo() {
+            const today = new Date();
+            const formatted = DateUtils.formatDate(today, 'YYYY年MM月DD日 HH:mm');
+            const dayName = DateUtils.getDayName(today);
+            document.getElementById('date-result').innerHTML = 
+                `今天是: ${formatted}<br>星期: ${dayName}`;
+        }
+        
+        function processArray() {
+            const input = document.getElementById('array-input').value;
+            const numbers = input.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n));
+            
+            const unique = ArrayUtils.unique(numbers);
+            const shuffled = ArrayUtils.shuffle(numbers);
+            const minMax = ArrayUtils.getMinMax(numbers);
+            
+            document.getElementById('array-result').innerHTML = 
+                `原数组: [${numbers.join(', ')}]<br>
+                 去重后: [${unique.join(', ')}]<br>
+                 打乱后: [${shuffled.join(', ')}]<br>
+                 最小值: ${minMax.min}, 最大值: ${minMax.max}`;
+        }
+        
+        function validateForm() {
+            const email = document.getElementById('email-input').value;
+            const phone = document.getElementById('phone-input').value;
+            
+            const emailValid = ValidationUtils.isEmail(email);
+            const phoneValid = ValidationUtils.isPhone(phone);
+            
+            document.getElementById('validation-result').innerHTML = 
+                `邮箱验证: ${emailValid ? '✅ 有效' : '❌ 无效'}<br>
+                 手机验证: ${phoneValid ? '✅ 有效' : '❌ 无效'}`;
+        }
+        
+        // 页面加载完成后的提示
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('多个外部文件演示页面已准备就绪！');
+            console.log('可用的工具类:', ['MathUtils', 'StringUtils', 'DateUtils', 'ArrayUtils', 'ValidationUtils']);
+        });
+    </script>
+</body>
+</html>
